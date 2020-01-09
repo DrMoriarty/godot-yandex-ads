@@ -181,14 +181,19 @@ public class GodotYandexAds extends Godot.SingletonBase
 		{
 			@Override public void run()
 			{
-				if (rewardedVideoAd == null) {
-					initRewardedVideo();
-				}
+                try {
+                    if (rewardedVideoAd == null) {
+                        initRewardedVideo();
+                        rewardedVideoAd.setBlockId(id);
+                    }
 
-				if (!rewardedVideoAd.isLoaded()) {
-                    rewardedVideoAd.setBlockId(id);
-					rewardedVideoAd.loadAd(getAdRequest());
-				}
+                    if (!rewardedVideoAd.isLoaded()) {
+                        rewardedVideoAd.loadAd(getAdRequest());
+                    }
+                } catch (Exception e) {
+                    Log.e("godot", e.toString());
+                    e.printStackTrace();
+                }
 			}
 		});
 	}

@@ -107,69 +107,62 @@ public class GodotYandexAds extends Godot.SingletonBase
 
 	/* Rewarded Video
 	 * ********************************************************************** */
-	private void initRewardedVideo()
+	private void initRewardedVideo(final String id)
 	{
-		activity.runOnUiThread(new Runnable()
-		{
-			@Override public void run()
-			{
-				rewardedVideoAd = new RewardedAd(activity);
-				rewardedVideoAd.setRewardedAdEventListener(new RewardedAdEventListener.SimpleRewardedAdEventListener()
-				{
-					@Override
-					public void onAdLeftApplication() {
-						Log.w("godot", "YandexAds: onRewardedVideoAdLeftApplication");
-						GodotLib.calldeferred(instance_id, "_on_rewarded_video_ad_left_application", new Object[] { });
-					}
+        rewardedVideoAd = new RewardedAd(activity);
+        rewardedVideoAd.setBlockId(id);
+        rewardedVideoAd.setRewardedAdEventListener(new RewardedAdEventListener.SimpleRewardedAdEventListener()
+            {
+                @Override
+                public void onAdLeftApplication() {
+                    Log.w("godot", "YandexAds: onRewardedVideoAdLeftApplication");
+                    GodotLib.calldeferred(instance_id, "_on_rewarded_video_ad_left_application", new Object[] { });
+                }
 
-					@Override
-					public void onAdClosed() {
-						Log.w("godot", "YandexAds: onRewardedVideoAdClosed");
-						GodotLib.calldeferred(instance_id, "_on_rewarded_video_ad_closed", new Object[] { });
-					}
+                @Override
+                public void onAdClosed() {
+                    Log.w("godot", "YandexAds: onRewardedVideoAdClosed");
+                    GodotLib.calldeferred(instance_id, "_on_rewarded_video_ad_closed", new Object[] { });
+                }
 
-					@Override
-					public void onAdFailedToLoad(final AdRequestError error) {
-						Log.w("godot", "YandexAds: onRewardedVideoAdFailedToLoad. error: " + error.toString());
-						GodotLib.calldeferred(instance_id, "_on_rewarded_video_ad_failed_to_load", new Object[] { error.toString() });
-					}
+                @Override
+                public void onAdFailedToLoad(final AdRequestError error) {
+                    Log.w("godot", "YandexAds: onRewardedVideoAdFailedToLoad. error: " + error.toString());
+                    GodotLib.calldeferred(instance_id, "_on_rewarded_video_ad_failed_to_load", new Object[] { error.toString() });
+                }
 
-					@Override
-					public void onAdLoaded() {
-						Log.w("godot", "YandexAds: onRewardedVideoAdLoaded");
-						GodotLib.calldeferred(instance_id, "_on_rewarded_video_ad_loaded", new Object[] { });
-					}
+                @Override
+                public void onAdLoaded() {
+                    Log.w("godot", "YandexAds: onRewardedVideoAdLoaded");
+                    GodotLib.calldeferred(instance_id, "_on_rewarded_video_ad_loaded", new Object[] { });
+                }
 
-					@Override
-					public void onAdOpened() {
-						Log.w("godot", "YandexAds: onRewardedVideoAdOpened");
-						GodotLib.calldeferred(instance_id, "_on_rewarded_video_ad_opened", new Object[] { });
-					}
+                @Override
+                public void onAdOpened() {
+                    Log.w("godot", "YandexAds: onRewardedVideoAdOpened");
+                    GodotLib.calldeferred(instance_id, "_on_rewarded_video_ad_opened", new Object[] { });
+                }
 
-					@Override
-					public void onRewarded(final Reward reward) {
-						Log.w("godot", "YandexAds: " + String.format(" onRewarded! currency: %s amount: %d", reward.getType(), reward.getAmount()));
-						GodotLib.calldeferred(instance_id, "_on_rewarded", new Object[] { reward.getType(), reward.getAmount() });
-					}
+                @Override
+                public void onRewarded(final Reward reward) {
+                    Log.w("godot", "YandexAds: " + String.format(" onRewarded! currency: %s amount: %d", reward.getType(), reward.getAmount()));
+                    GodotLib.calldeferred(instance_id, "_on_rewarded", new Object[] { reward.getType(), reward.getAmount() });
+                }
 
-                    /*
-					@Override
-					public void onRewardedVideoStarted() {
-						Log.w("godot", "YandexAds: onRewardedVideoStarted");
-						GodotLib.calldeferred(instance_id, "_on_rewarded_video_started", new Object[] { });
-					}
+                /*
+                  @Override
+                  public void onRewardedVideoStarted() {
+                  Log.w("godot", "YandexAds: onRewardedVideoStarted");
+                  GodotLib.calldeferred(instance_id, "_on_rewarded_video_started", new Object[] { });
+                  }
 
-					@Override
-					public void onRewardedVideoCompleted() {
-						Log.w("godot", "YandexAds: onRewardedVideoCompleted");
-						GodotLib.calldeferred(instance_id, "_on_rewarded_video_completed", new Object[] { });
-					}
-                    */
-				});
-
-			}
-		});
-
+                  @Override
+                  public void onRewardedVideoCompleted() {
+                  Log.w("godot", "YandexAds: onRewardedVideoCompleted");
+                  GodotLib.calldeferred(instance_id, "_on_rewarded_video_completed", new Object[] { });
+                  }
+                */
+            });
 	}
 
 	/**
@@ -183,8 +176,7 @@ public class GodotYandexAds extends Godot.SingletonBase
 			{
                 try {
                     if (rewardedVideoAd == null) {
-                        initRewardedVideo();
-                        rewardedVideoAd.setBlockId(id);
+                        initRewardedVideo(id);
                     }
 
                     if (!rewardedVideoAd.isLoaded()) {
@@ -315,7 +307,7 @@ public class GodotYandexAds extends Godot.SingletonBase
 				adParams = new FrameLayout.LayoutParams(
 					FrameLayout.LayoutParams.MATCH_PARENT,
 					FrameLayout.LayoutParams.WRAP_CONTENT
-				);
+ 				);
 				adParams.gravity = gravity;
 				AdEventListener adListener = adView.getAdEventListener();
 				String id = adView.getBlockId();
@@ -400,36 +392,43 @@ public class GodotYandexAds extends Godot.SingletonBase
 		        interstitialAd.setInterstitialEventListener(new InterstitialEventListener.SimpleInterstitialEventListener()
 				{
 					@Override
-					public void onInterstitialLoaded() {
-						Log.w("godot", "YandexAds: onAdLoaded");
-						GodotLib.calldeferred(instance_id, "_on_interstitial_loaded", new Object[] { });
+					public void onAdClosed() {
+						Log.w("godot", "YandexAds: onAdClosed");
 					}
 
-					@Override
-					public void onInterstitialFailedToLoad(final AdRequestError error) {
-						Log.w("godot", "YandexAds: onAdFailedToLoad(int errorCode) - error: " + error.toString());
-						Log.w("godot", "YandexAds: _on_interstitial_not_loaded");
-						GodotLib.calldeferred(instance_id, "_on_interstitial_not_loaded", new Object[] { });
-					}
+                    @Override
+                    public void onAdLeftApplication() {
+						Log.w("godot", "YandexAds: onAdLeftApplication");
+                    }
 
 					@Override
 					public void onAdOpened() {
 						Log.w("godot", "YandexAds: onAdOpened()");
 					}
 
-					@Override
-					public void onAdLeftApplication() {
-						Log.w("godot", "YandexAds: onAdLeftApplication()");
-					}
-
-					@Override
-					public void onAdClosed() {
+                    @Override
+                    public void onInterstitialDismissed() {
+						Log.w("godot", "YandexAds: onInterstitialDismissed()");
 						GodotLib.calldeferred(instance_id, "_on_interstitial_close", new Object[] { });
+                    }
 
-						interstitialAd.loadAd(getAdRequest());
-
-						Log.w("godot", "YandexAds: onAdClosed");
+					@Override
+					public void onInterstitialFailedToLoad(final AdRequestError error) {
+						Log.w("godot", "YandexAds: onInterstitialFailedToLoad(int errorCode) - error: " + error.toString());
+						Log.w("godot", "YandexAds: _on_interstitial_not_loaded");
+						GodotLib.calldeferred(instance_id, "_on_interstitial_not_loaded", new Object[] { });
 					}
+
+					@Override
+					public void onInterstitialLoaded() {
+						Log.w("godot", "YandexAds: onInterstitialLoaded");
+						GodotLib.calldeferred(instance_id, "_on_interstitial_loaded", new Object[] { });
+					}
+
+                    @Override
+                    public void onInterstitialShown() {
+						Log.w("godot", "YandexAds: onInterstitialShown");
+                    }
 				});
 
 

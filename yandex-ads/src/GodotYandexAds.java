@@ -236,7 +236,7 @@ public class GodotYandexAds extends Godot.SingletonBase
 				adView = new AdView(activity);
 				adView.setBlockId(id);
 
-				adView.setBackgroundColor(Color.TRANSPARENT);
+				adView.setBackgroundColor(/* Color.WHITE */Color.TRANSPARENT);
 
 				adView.setAdSize(new AdSize(AdSize.FULL_WIDTH, 50));
 				adView.setAdEventListener(new AdEventListener.SimpleAdEventListener()

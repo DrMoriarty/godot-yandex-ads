@@ -282,7 +282,9 @@ public class GodotYandexAds extends Godot.SingletonBase
                     AdView b = initBanner(id, isOnTop, callback_id);
                     banners.put(id, b);
 				} else {
-                    Log.w("godot", "YandexAds: Banner already created: "+id);
+                    AdView b = banners.get(id);
+                    b.loadAd(getAdRequest());
+                    //Log.w("godot", "YandexAds: Banner already created: "+id);
                 }
 			}
 		});

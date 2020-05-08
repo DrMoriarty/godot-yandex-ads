@@ -406,7 +406,10 @@ public class GodotYandexAds extends Godot.SingletonBase
 	{
         if(banners.containsKey(id)) {
             AdView b = banners.get(id);
-            return b.getAdSize().getWidthInPixels(activity);
+            if(b != null)
+                return b.getAdSize().getWidthInPixels(activity);
+            else
+                return 0;
         } else {
             return 0; //320;
         }
@@ -420,9 +423,12 @@ public class GodotYandexAds extends Godot.SingletonBase
 	{
         if(banners.containsKey(id)) {
             AdView b = banners.get(id);
-            return b.getAdSize().getHeightInPixels(activity);
+            if(b != null)
+                return b.getAdSize().getHeightInPixels(activity);
+            else
+                return 0;
         } else {
-            return 0; //50;
+            return 0;
         }
 	}
 
